@@ -1,24 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 
 
 
 export interface IModalProps {
     show: boolean;
-    header?: string;
-    body?: string;
-    positiveButtonCaption?: string;
-    negativeButtonCaption?: string;
+    header: string;
+    body: string;
+    positiveButtonCaption: string;
+    negativeButtonCaption: string;
     positiveClickHandel: (parameters: any) => void;
-    negativeClickHandel?: (parameters: any) => void;
-    parameters: any;
-    modalType: 'Custom' | 'Delete_Confirmation';
-
-
+    negativeClickHandel: (parameters: any) => void;
+    parameters?: any;
 }
 
-export const ModalDialog = (props: IModalProps) => {
-    // const [show, setShow] = useState(false);
+export const AppDialog = (props: IModalProps) => {
     let {
         show,
         header,
@@ -27,15 +23,8 @@ export const ModalDialog = (props: IModalProps) => {
         negativeButtonCaption,
         positiveClickHandel,
         negativeClickHandel,
-        parameters,
-        modalType } = props;
-
-    if (modalType === "Delete_Confirmation") {
-        header = "Record deleting"
-        body = "Are you sure for deleting data?";
-        positiveButtonCaption = "Yes";
-        negativeButtonCaption = "No";
-    }
+        parameters
+        } = props;
 
 
     const confirmHandelClose = () => {

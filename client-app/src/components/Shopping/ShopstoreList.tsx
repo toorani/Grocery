@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Container, Button, Form } from 'react-bootstrap'
-import { ModalDialog } from '../Shared/ModalDialog';
+import { DeleteButton } from '../Shared/DeleteButton';
 
 
 interface ShopModel {
@@ -12,8 +12,6 @@ interface ShopModel {
 export const ShopstoreList = () => {
     const apiUri = 'https://localhost:5001/api/shopstore';
     const [lstShopping, setShoppingList] = useState<ShopModel[]>([]);
-    const [isShowDialog, setIsShowDialog] = useState(false);
-    const [selectedId, setSelectedId] = useState(0);
     useEffect(() => {
         fetch(apiUri + '/all')
             .then(res => res.json())
@@ -48,13 +46,9 @@ export const ShopstoreList = () => {
             .catch(err => console.log(err));
     }
 
-    const beforeDeleteRecord = (id: number) => {
-        setSelectedId(id);
-        setIsShowDialog(true);
+   
 
-    }
-
-    const deletingRecord = (param: any) => {
+    const deleteRecord = (param: any) => {
         fetch(apiUri + `/${param}`,
             {
                 method: 'DELETE',
@@ -65,8 +59,6 @@ export const ShopstoreList = () => {
                 setShoppingList([...lstShopping.slice(0, idx), ...lstShopping.slice(idx + 1, lstShopping.length)]);
             })
             .catch(err => console.log(err));
-        setIsShowDialog(false);
-
     }
 
     const titleChanging = (value: string, index: number) => {
@@ -98,19 +90,13 @@ export const ShopstoreList = () => {
                             </td>
                             <td width="20%">
                                 <Button variant="secondary" onClick={() => submitData(shop, index)} type="submit">Submit</Button>
-                                <Button variant="danger" onClick={() => beforeDeleteRecord(shop.id)}>Delete</Button>
+                                <DeleteButton variant="danger" onClick={() => deleteRecord(shop.id)}/>
                             </td>
                         </tr>
-
                     ))}
                 </tbody>
             </Table>
-            <ModalDialog
-                parameters={selectedId}
-                show={isShowDialog}
-                modalType="Delete_Confirmation"
-                negativeClickHandel={() => setIsShowDialog(false)}
-                positiveClickHandel={(param) => deletingRecord(param)} />
+            
         </Container >
 
     )
