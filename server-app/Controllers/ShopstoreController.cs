@@ -47,7 +47,7 @@ namespace Grocery_Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ShopStore entity)
+        public async Task<ActionResult<ShopStore>> Update(int id, [FromBody] ShopStore entity)
         {
             if (entity.Id != id)
                 return BadRequest();
@@ -62,7 +62,7 @@ namespace Grocery_Server.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return entity;
         }
 
         [HttpDelete("{id}")]

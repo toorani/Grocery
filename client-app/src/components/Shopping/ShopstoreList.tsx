@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Container, Button, Form } from 'react-bootstrap'
 import { DeleteButton } from '../Shared/DeleteButton';
+import { AlertMessage } from '../Shared/Alert';
+import './shopp.css';
 
 
 interface ShopModel {
@@ -18,7 +20,11 @@ export const ShopstoreList = () => {
             .then(data => {
                 data.forEach((element: ShopModel) => element.isTemp = false);
                 setShoppingList(data);
-            });
+            })
+            .catch(err => {
+                AlertMessage({ type: 'danger', message: err });
+                console.log(err);
+            });;
 
     }, []);
 
@@ -27,9 +33,15 @@ export const ShopstoreList = () => {
     }
 
     const submitData = (entity: ShopModel, idx: number) => {
+        let methodName = 'POST';
+        let apiURL = apiUri;
+        let msg = 'Shopstore was successfully saved!';
+        if (entity.isTemp == false) {
+            methodName = 'PUT';
+            apiURL = apiUri + `/${entity.id}`;
+            msg = 'Shopstore was successfully updated!'
+        }
 
-        let methodName = entity.isTemp ? 'POST' : 'PUT';
-        const apiURL = apiUri + (entity.isTemp ? '' : `/${entity.id}`);
         fetch(apiURL,
             {
                 method: methodName,
@@ -40,25 +52,34 @@ export const ShopstoreList = () => {
             .then(_ => {
                 let _lst = [...lstShopping];
                 _lst[idx].isTemp = false;
+                AlertMessage({ type: 'success', message: msg });
                 setShoppingList(_lst);
-
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                AlertMessage({ type: 'danger', message: err });
+                console.log(err);
+            });
     }
 
-   
+
 
     const deleteRecord = (param: any) => {
+        const idx = lstShopping.findIndex(x => x.id === param);
+        if (lstShopping[idx].isTemp) {
+            setShoppingList([...lstShopping.slice(0, idx), ...lstShopping.slice(idx + 1, lstShopping.length)]);
+            AlertMessage({ type: 'success', message: 'Shopestore was successfully deleted!' });
+            return;
+        }
         fetch(apiUri + `/${param}`,
             {
                 method: 'DELETE',
             })
             .then(res => res.json())
             .then(_ => {
-                const idx = lstShopping.findIndex(x => x.id === param);
                 setShoppingList([...lstShopping.slice(0, idx), ...lstShopping.slice(idx + 1, lstShopping.length)]);
+                AlertMessage({ type: 'success', message: 'Shopestore was successfully deleted!' });
             })
-            .catch(err => console.log(err));
+            .catch(err => AlertMessage({ type: 'danger', message: err }));
     }
 
     const titleChanging = (value: string, index: number) => {
@@ -71,6 +92,7 @@ export const ShopstoreList = () => {
     return (
 
         <Container >
+
             <Button variant="primary" onClick={addShopstore}>New</Button>
             <Table striped bordered hover responsive>
                 <thead>
@@ -90,13 +112,13 @@ export const ShopstoreList = () => {
                             </td>
                             <td width="20%">
                                 <Button variant="secondary" onClick={() => submitData(shop, index)} type="submit">Submit</Button>
-                                <DeleteButton variant="danger" onClick={() => deleteRecord(shop.id)}/>
+                                <DeleteButton variant="danger" onClick={() => deleteRecord(shop.id)} />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            
+
         </Container >
 
     )

@@ -14,8 +14,8 @@ export const DeleteButton = (props: any) => {
             <Button variant="danger" onClick={() => setShowDialog(true)}>Delete</Button>
             <DeleteConfirmationDialog
                 showDialog={showDialog}
-                negativeClickHandel={() => setShowDialog(false)}
-                positiveClickHandel={onClick} />
+                onCancelClick={() => setShowDialog(false)}
+                onDeleteClick={onClick} />
         </>
     )
 }

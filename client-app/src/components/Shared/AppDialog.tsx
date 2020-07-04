@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Container } from 'react-bootstrap'
 
 
 
@@ -7,10 +7,10 @@ export interface IModalProps {
     show: boolean;
     header: string;
     body: string;
-    positiveButtonCaption: string;
-    negativeButtonCaption: string;
-    positiveClickHandel: (parameters: any) => void;
-    negativeClickHandel: (parameters: any) => void;
+    acceptButtonCaption: string;
+    cancelButtonCaption: string;
+    onAcceptClick: (parameters: any) => void;
+    onCancelClick: (parameters: any) => void;
     parameters?: any;
 }
 
@@ -19,26 +19,27 @@ export const AppDialog = (props: IModalProps) => {
         show,
         header,
         body,
-        positiveButtonCaption,
-        negativeButtonCaption,
-        positiveClickHandel,
-        negativeClickHandel,
+        acceptButtonCaption,
+        cancelButtonCaption,
+        onAcceptClick,
+        onCancelClick,
         parameters
-        } = props;
+    } = props;
 
 
     const confirmHandelClose = () => {
-        positiveClickHandel(parameters);
+        onAcceptClick(parameters);
 
     }
 
     const rejectHandelClose = () => {
-        if (negativeClickHandel != null)
-            negativeClickHandel(parameters);
-        
+        if (onCancelClick != null)
+            onCancelClick(parameters);
+
     }
 
     return (
+        <Container>
         <Modal show={show} onHide={rejectHandelClose}>
             <Modal.Header closeButton>
                 <Modal.Title>{header}</Modal.Title>
@@ -46,12 +47,13 @@ export const AppDialog = (props: IModalProps) => {
             <Modal.Body>{body}</Modal.Body>
             <Modal.Footer>
                 <Button variant="success" onClick={rejectHandelClose}>
-                    {negativeButtonCaption}
+                    {cancelButtonCaption}
                 </Button>
                 <Button variant="danger" onClick={confirmHandelClose}>
-                    {positiveButtonCaption}
+                    {acceptButtonCaption}
                 </Button>
             </Modal.Footer>
         </Modal>
+        </Container>
     )
 }
