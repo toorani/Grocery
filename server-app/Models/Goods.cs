@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Grocery_Server.Models
 {
-    public class ShopStore : EntityBase
+    public class Goods : EntityBase
     {
         [StringLength(50)]
         public string Title { get; set; }
+        
     }
 }
