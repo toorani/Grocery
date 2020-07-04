@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 import { ShopstoreList } from './components/Shopping/ShopstoreList';
 import { NewBuy } from './components/Buying/NewBuy';
+import { GoodsList } from './components/Goods/GoodsList';
 
 
 function App() {
@@ -19,7 +20,9 @@ function App() {
         <Navbar variant="dark" bg="dark" >
           <Nav className="mr-auto">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
+            <Nav.Link as={Link} to="/goods">Goods</Nav.Link>
             <Nav.Link as={Link} to="/shopping">Shopping</Nav.Link>
+           
           </Nav>
           
         </Navbar>
@@ -29,6 +32,9 @@ function App() {
           </Route>
           <Route path="/shopping">
             <ShopstoreList />
+          </Route>
+          <Route path="/goods">
+            <GoodsList />
           </Route>
         </Switch>
       </Router>

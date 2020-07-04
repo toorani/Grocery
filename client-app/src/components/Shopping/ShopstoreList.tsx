@@ -3,22 +3,23 @@ import { Table, Container, Button, Form } from 'react-bootstrap'
 import { DeleteButton } from '../Shared/DeleteButton';
 import { AlertMessage } from '../Shared/Alert';
 import './shopp.css';
+import { IModelBase } from '../Shared/Interfaces';
+import { DataTable } from '../Shared/DataTable';
 
 
-interface ShopModel {
-    id: number,
+interface IShopModel extends IModelBase {
     title: string,
     isTemp: boolean
 }
 
 export const ShopstoreList = () => {
     const apiUri = 'https://localhost:5001/api/shopstore';
-    const [lstShopping, setShoppingList] = useState<ShopModel[]>([]);
+    const [lstShopping, setShoppingList] = useState<IShopModel[]>([]);
     useEffect(() => {
         fetch(apiUri + '/all')
             .then(res => res.json())
             .then(data => {
-                data.forEach((element: ShopModel) => element.isTemp = false);
+                data.forEach((element: IShopModel) => element.isTemp = false);
                 setShoppingList(data);
             })
             .catch(err => {
@@ -32,7 +33,7 @@ export const ShopstoreList = () => {
         setShoppingList([...lstShopping, ...[{ id: lstShopping.length + 1, title: "", isTemp: true }]]);
     }
 
-    const submitData = (entity: ShopModel, idx: number) => {
+    const submitData = (entity: IShopModel, idx: number) => {
         let methodName = 'POST';
         let apiURL = apiUri;
         let msg = 'Shopstore was successfully saved!';
@@ -94,31 +95,36 @@ export const ShopstoreList = () => {
         <Container >
 
             <Button variant="primary" onClick={addShopstore}>New</Button>
-            <Table striped bordered hover responsive>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {lstShopping.map((shop, index) => (
-
-                        <tr key={shop.id} >
-                            <td width="5%">{index + 1}</td>
+            <DataTable
+                getHTMLHeader={() => {
+                    return (
+                        <>
+                            <th>#</th>
+                            <th>Title</th>
+                            <td></td>
+                        </>);
+                }}
+                getHTMLRow={(entity, rowIndex) => {
+                    const shopModel = entity as IShopModel;
+                    return (
+                        <>
+                            <td width="5%">{rowIndex + 1}</td>
                             <td>
-                                <Form.Control type="text" placeholder="Title" value={shop.title} onChange={(e) => titleChanging(e.target.value, index)} />
+                                <Form.Control type="text"
+                                    placeholder="Title"
+                                    value={shopModel.title} onChange={(e) => titleChanging(e.target.value, rowIndex)} />
                             </td>
                             <td width="20%">
-                                <Button variant="secondary" onClick={() => submitData(shop, index)} type="submit">Submit</Button>
-                                <DeleteButton variant="danger" onClick={() => deleteRecord(shop.id)} />
+                                <Button variant="secondary" onClick={() => submitData(shopModel, rowIndex)} type="submit">Submit</Button>
+                                <DeleteButton variant="danger" onClick={() => deleteRecord(entity.id)} />
                             </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+                        </>
+                    )
+                }}
 
+                dataList={lstShopping}
+
+            />
         </Container >
 
     )
