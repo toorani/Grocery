@@ -14,7 +14,7 @@ export const DeleteConfirmationDialog = (props: IDeleteDialogProps) => {
     return (
         <AppDialog
             header="Record deleting"
-            body="Are you sure for deleting data?"
+            body={<p>Are you sure for deleting data?</p>}
             acceptButtonCaption="Yes"
             cancelButtonCaption="No"
             onAcceptClick={positiveClickHandel}

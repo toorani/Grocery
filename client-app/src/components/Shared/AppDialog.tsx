@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { Modal, Button, Container } from 'react-bootstrap'
 
 
@@ -6,7 +6,7 @@ import { Modal, Button, Container } from 'react-bootstrap'
 export interface IModalProps {
     show: boolean;
     header: string;
-    body: string;
+    body: ReactElement;
     acceptButtonCaption: string;
     cancelButtonCaption: string;
     onAcceptClick: (parameters: any) => void;

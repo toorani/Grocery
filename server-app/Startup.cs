@@ -31,7 +31,8 @@ namespace Grocery_Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDBContext>(options => options
-                .UseMySql(Configuration.GetConnectionString("MySql"),
+                // .UseMySql(Configuration.GetConnectionString("MySql"),
+                .UseMySql("server=192.168.178.25;Port=3308;database=groceries;user=root;password=mar321",
                 mySqlOptions => mySqlOptions.ServerVersion(new Version(8, 0, 20), ServerType.MySql)
             ));
 

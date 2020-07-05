@@ -22,5 +22,4 @@ namespace Grocery_Server.Controllers
         {
             return await context.Goods.ToListAsync();
         }
-    }
-}
+    } 

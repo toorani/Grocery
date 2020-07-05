@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { IModelBase } from '../Shared/Interfaces'
 import { serverBaseUri } from '../Shared/Constants'
 import { AlertMessage } from '../Shared/Alert'
-import { Container } from 'react-bootstrap'
+import { Container, Button } from 'react-bootstrap'
 import { DataTable } from '../Shared/DataTable'
+
 
 interface IGoodsModel extends IModelBase {
     title: string;
@@ -24,8 +25,14 @@ export const GoodsList = () => {
             .catch(err => AlertMessage({ type: "danger", message: err }));
     })
 
+    const onAddGoods = () => {
+
+    }
+
+
     return (
         <Container>
+            <Button onClick={onAddGoods} >Add Goods</Button>
             <DataTable
                 getHTMLHeader={() => (
                     <>
