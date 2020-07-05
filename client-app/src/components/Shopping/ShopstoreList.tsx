@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Container, Button, Form } from 'react-bootstrap'
+import {  Container, Button, Form } from 'react-bootstrap'
 import { DeleteButton } from '../Shared/DeleteButton';
 import { AlertMessage } from '../Shared/Alert';
 import './shopp.css';
 import { IModelBase } from '../Shared/Interfaces';
 import { DataTable } from '../Shared/DataTable';
+import { serverBaseUri } from '../Shared/Constants';
 
 
 interface IShopModel extends IModelBase {
@@ -13,7 +14,7 @@ interface IShopModel extends IModelBase {
 }
 
 export const ShopstoreList = () => {
-    const apiUri = 'https://localhost:5001/api/shopstore';
+    const apiUri = serverBaseUri + 'shopstore';
     const [lstShopping, setShoppingList] = useState<IShopModel[]>([]);
     useEffect(() => {
         fetch(apiUri + '/all')
@@ -27,7 +28,7 @@ export const ShopstoreList = () => {
                 console.log(err);
             });;
 
-    }, []);
+    },[]);
 
     const addShopstore = () => {
         setShoppingList([...lstShopping, ...[{ id: lstShopping.length + 1, title: "", isTemp: true }]]);
@@ -37,7 +38,7 @@ export const ShopstoreList = () => {
         let methodName = 'POST';
         let apiURL = apiUri;
         let msg = 'Shopstore was successfully saved!';
-        if (entity.isTemp == false) {
+        if (entity.isTemp === false) {
             methodName = 'PUT';
             apiURL = apiUri + `/${entity.id}`;
             msg = 'Shopstore was successfully updated!'

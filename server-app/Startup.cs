@@ -58,7 +58,7 @@ namespace Grocery_Api
 
             app.UseCors(CorePolicyName);
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

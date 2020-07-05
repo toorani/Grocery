@@ -2,21 +2,20 @@
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Grocery_Api.csproj", ""]
-RUN dotnet restore "./Grocery_Api.csproj"
+COPY ["Grocery_Server.csproj", ""]
+RUN dotnet restore "./Grocery_Server.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "Grocery_Api.csproj" -c Release -o /app/build
+RUN dotnet build "Grocery_Server.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Grocery_Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "Grocery_Server.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Grocery_Api.dll"]
+ENTRYPOINT ["dotnet", "Grocery_Server.dll"]

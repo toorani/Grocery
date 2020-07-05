@@ -1,0 +1,1 @@
+export const serverBaseUri ='https://localhost:5001/api/';
